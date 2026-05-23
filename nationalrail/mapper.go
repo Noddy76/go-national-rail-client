@@ -199,7 +199,8 @@ func mapService(s *soap.Service) *Service {
 			Code: s.OperatorCode,
 			Name: s.Operator,
 		},
-		Platform:        s.Platform,
+		Platform:        parsePlatform(s.Platform),
+		PlatformString:  s.Platform,
 		RetailServiceID: s.Rsid,
 		Formation: Formation{
 			Coaches: mapCoaches(s.Formation.Coaches.Coach),
@@ -368,7 +369,8 @@ func mapServiceDetails(s *soap.GetServiceDetailsResult) (*ServiceDetails, error)
 			Code: s.OperatorCode,
 			Name: s.Operator,
 		},
-		Platform:                 s.Platform,
+		Platform:                 parsePlatform(s.Platform),
+		PlatformString:           s.Platform,
 		Type:                     s.ServiceType,
 		ScheduledTimeOfArrival:   s.Sta,
 		EstimatedTimeOfArrival:   s.Eta,
@@ -436,3 +438,14 @@ func mapServiceDetails(s *soap.GetServiceDetailsResult) (*ServiceDetails, error)
 
 	return &serviceDetails, nil
 }
+
+func parsePlatform(p string) int {
+	var val int
+	var i int
+	for i < len(p) && p[i] >= '0' && p[i] <= '9' {
+		val = val*10 + int(p[i]-'0')
+		i++
+	}
+	return val
+}
+

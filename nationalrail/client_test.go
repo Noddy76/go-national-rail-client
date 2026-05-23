@@ -118,7 +118,8 @@ func TestGetArrivalsWithDetails(t *testing.T) {
 							Code: "SE",
 							Name: "Southeastern",
 						},
-						Platform: 2,
+						Platform:       2,
+						PlatformString: "2",
 						PreviousCallingPointsPerOrigin: [][]*nr.CallingPoint{
 							{
 								{
@@ -423,7 +424,8 @@ func TestGetArrivalsWithDetails(t *testing.T) {
 							Code: "SE",
 							Name: "Southeastern",
 						},
-						Platform: 2,
+						Platform:       2,
+						PlatformString: "2",
 						PreviousCallingPointsPerOrigin: [][]*nr.CallingPoint{
 							{
 								{
@@ -2104,6 +2106,42 @@ func TestGetArrivalsWithDetails(t *testing.T) {
 			},
 			errAssert: assert.NoError,
 		},
+		"Success_AlphanumericPlatform": {
+			crs: nr.StationCodeReading,
+			setupMock: func() *httptest.Server {
+				data, err := os.ReadFile(filepath.Join("testdata", "GetArrBoardWithDetailsResponse_AlphanumericPlatform.xml"))
+				require.NoError(t, err)
+
+				ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					w.WriteHeader(http.StatusOK)
+					_, err := w.Write(data)
+					require.NoError(t, err)
+				}))
+				return ts
+			},
+			expectedStationBoard: &nr.StationBoard{
+				CRS:          nr.StationCodeReading,
+				LocationName: nr.StationNameReading,
+				Services: []*nr.Service{
+					{
+						ID:     "alphanumeric_service_id",
+						Type:   "train",
+						Length: 8,
+						Operator: nr.Operator{
+							Code: "GW",
+							Name: "Great Western Railway",
+						},
+						Platform:               10,
+						PlatformString:         "10A",
+						EstimatedTimeOfArrival: pstr("On time"),
+						ScheduledTimeOfArrival: pstr("09:23"),
+					},
+				},
+				PlatformAvailable: true,
+				GeneratedAt:       timeFromRFC3339(t, "2024-01-03T08:55:05.8471861Z"),
+			},
+			errAssert: assert.NoError,
+		},
 		"Fail_BadCRS": {
 			crs: nr.CRSCode("test"),
 			setupMock: func() *httptest.Server {
@@ -2171,6 +2209,7 @@ func TestGetArrivalsWithDetails(t *testing.T) {
 				assert.Equal(t, expectedService.Length, actualService.Length)
 				assert.Equal(t, expectedService.Operator, actualService.Operator)
 				assert.Equal(t, expectedService.Platform, actualService.Platform)
+				assert.Equal(t, expectedService.PlatformString, actualService.PlatformString)
 				assert.Equal(t, expectedService.RetailServiceID, actualService.RetailServiceID)
 				assert.Equal(t, expectedService.ScheduledTimeOfArrival, actualService.ScheduledTimeOfArrival)
 
@@ -2308,7 +2347,8 @@ func TestGetArrivalsAndDeparturesWithDetails(t *testing.T) {
 							Code: "SE",
 							Name: "Southeastern",
 						},
-						Platform: 2,
+						Platform:       2,
+						PlatformString: "2",
 						PreviousCallingPointsPerOrigin: [][]*nr.CallingPoint{
 							{
 								{
@@ -3876,7 +3916,8 @@ func TestGetArrivalsAndDeparturesWithDetails(t *testing.T) {
 							Code: "TL",
 							Name: "Thameslink",
 						},
-						Platform: 2,
+						Platform:       2,
+						PlatformString: "2",
 						PreviousCallingPointsPerOrigin: [][]*nr.CallingPoint{
 							{
 								{
@@ -4281,6 +4322,7 @@ func TestGetArrivalsAndDeparturesWithDetails(t *testing.T) {
 				assert.Equal(t, expectedService.Length, actualService.Length)
 				assert.Equal(t, expectedService.Operator, actualService.Operator)
 				assert.Equal(t, expectedService.Platform, actualService.Platform)
+				assert.Equal(t, expectedService.PlatformString, actualService.PlatformString)
 				assert.Equal(t, expectedService.RetailServiceID, actualService.RetailServiceID)
 				assert.Equal(t, expectedService.ScheduledTimeOfArrival, actualService.ScheduledTimeOfArrival)
 
@@ -4426,6 +4468,7 @@ func TestGetArrivals(t *testing.T) {
 							Name: "Southeastern",
 						},
 						Platform:               2,
+						PlatformString:         "2",
 						ScheduledTimeOfArrival: pstr("20:57"),
 						DelayReason:            pstr("This train has been delayed by a problem currently under investigation"),
 					},
@@ -4489,6 +4532,7 @@ func TestGetArrivals(t *testing.T) {
 							Name: "Southeastern",
 						},
 						Platform:               2,
+						PlatformString:         "2",
 						ScheduledTimeOfArrival: pstr("21:29"),
 					},
 					{
@@ -4669,6 +4713,7 @@ func TestGetArrivals(t *testing.T) {
 				assert.Equal(t, expectedService.Length, actualService.Length)
 				assert.Equal(t, expectedService.Operator, actualService.Operator)
 				assert.Equal(t, expectedService.Platform, actualService.Platform)
+				assert.Equal(t, expectedService.PlatformString, actualService.PlatformString)
 				assert.Equal(t, expectedService.ScheduledTimeOfArrival, actualService.ScheduledTimeOfArrival)
 
 				assert.ElementsMatch(t, expectedService.Origins, actualService.Origins)
@@ -4798,6 +4843,7 @@ func TestGetArrivalsAndDepartures(t *testing.T) {
 							Name: "Southeastern",
 						},
 						Platform:                 1,
+						PlatformString:           "1",
 						ScheduledTimeOfArrival:   pstr("22:05"),
 						EstimatedTimeOfDeparture: pstr("On time"),
 						ScheduledTimeOfDeparture: pstr("22:05"),
@@ -4880,6 +4926,7 @@ func TestGetArrivalsAndDepartures(t *testing.T) {
 							Name: "Southeastern",
 						},
 						Platform:                 1,
+						PlatformString:           "1",
 						ScheduledTimeOfArrival:   pstr("22:22"),
 						EstimatedTimeOfDeparture: pstr("On time"),
 						ScheduledTimeOfDeparture: pstr("22:23"),
@@ -4965,6 +5012,7 @@ func TestGetArrivalsAndDepartures(t *testing.T) {
 				assert.Equal(t, expectedService.Length, actualService.Length)
 				assert.Equal(t, expectedService.Operator, actualService.Operator)
 				assert.Equal(t, expectedService.Platform, actualService.Platform)
+				assert.Equal(t, expectedService.PlatformString, actualService.PlatformString)
 				assert.Equal(t, expectedService.ScheduledTimeOfArrival, actualService.ScheduledTimeOfArrival)
 
 				assert.ElementsMatch(t, expectedService.Origins, actualService.Origins)
@@ -5021,6 +5069,7 @@ func TestGetDepartures(t *testing.T) {
 							Name: "Thameslink",
 						},
 						Platform:                 4,
+						PlatformString:           "4",
 						RetailServiceID:          pstr("TL353900"),
 						EstimatedTimeOfDeparture: pstr("22:22"),
 						ScheduledTimeOfDeparture: pstr("22:18"),
@@ -5102,6 +5151,7 @@ func TestGetDepartures(t *testing.T) {
 				assert.Equal(t, expectedService.Length, actualService.Length)
 				assert.Equal(t, expectedService.Operator, actualService.Operator)
 				assert.Equal(t, expectedService.Platform, actualService.Platform)
+				assert.Equal(t, expectedService.PlatformString, actualService.PlatformString)
 				assert.Equal(t, expectedService.RetailServiceID, actualService.RetailServiceID)
 				assert.Equal(t, expectedService.ScheduledTimeOfArrival, actualService.ScheduledTimeOfArrival)
 
@@ -5395,6 +5445,7 @@ func TestGetFastestDepartures(t *testing.T) {
 								Name: "Southeastern",
 							},
 							Platform:                 2,
+							PlatformString:           "2",
 							ScheduledTimeOfArrival:   pstr("23:13"),
 							EstimatedTimeOfDeparture: pstr("On time"),
 							ScheduledTimeOfDeparture: pstr("23:18"),
@@ -5528,6 +5579,7 @@ func TestGetFastestDeparturesWithDetails(t *testing.T) {
 								Name: "Thameslink",
 							},
 							Platform:                 1,
+							PlatformString:           "1",
 							RetailServiceID:          pstr("TL353900"),
 							ScheduledTimeOfArrival:   pstr("23:29"),
 							EstimatedTimeOfDeparture: pstr("On time"),
@@ -5830,6 +5882,7 @@ func TestGetNextDepartures(t *testing.T) {
 								Name: "Southeastern",
 							},
 							Platform:                 3,
+							PlatformString:           "3",
 							ScheduledTimeOfArrival:   pstr("00:01"),
 							EstimatedTimeOfDeparture: pstr("On time"),
 							ScheduledTimeOfDeparture: pstr("00:01"),
@@ -6111,6 +6164,7 @@ func TestGetNextDeparturesWithDetails(t *testing.T) {
 								Name: "Southeastern",
 							},
 							Platform:                 3,
+							PlatformString:           "3",
 							ScheduledTimeOfArrival:   pstr("00:01"),
 							EstimatedTimeOfDeparture: pstr("On time"),
 							ScheduledTimeOfDeparture: pstr("00:01"),
@@ -7148,7 +7202,8 @@ func TestGetServiceDetails(t *testing.T) {
 					Code: "SE",
 					Name: "Southeastern",
 				},
-				Platform: 3,
+				Platform:       3,
+				PlatformString: "3",
 				PreviousCallingPointsPerOrigin: [][]*nr.CallingPoint{
 					{
 						{

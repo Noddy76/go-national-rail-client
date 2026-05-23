@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Body>
+    <GetArrBoardWithDetailsResponse xmlns="http://thalesgroup.com/RTTI/2021-11-01/ldb/">
+      <GetStationBoardResult xmlns:lt="http://thalesgroup.com/RTTI/2012-01-13/ldb/types" xmlns:lt8="http://thalesgroup.com/RTTI/2021-11-01/ldb/types" xmlns:lt6="http://thalesgroup.com/RTTI/2017-02-02/ldb/types" xmlns:lt7="http://thalesgroup.com/RTTI/2017-10-01/ldb/types" xmlns:lt4="http://thalesgroup.com/RTTI/2015-11-27/ldb/types" xmlns:lt5="http://thalesgroup.com/RTTI/2016-02-16/ldb/types" xmlns:lt2="http://thalesgroup.com/RTTI/2014-02-20/ldb/types" xmlns:lt3="http://thalesgroup.com/RTTI/2015-05-14/ldb/types">
+        <lt4:generatedAt>2024-01-03T08:55:05.8471861+00:00</lt4:generatedAt>
+        <lt4:locationName>Reading</lt4:locationName>
+        <lt4:crs>RDG</lt4:crs>
+        <lt4:platformAvailable>true</lt4:platformAvailable>
+        <lt8:trainServices>
+          <lt8:service>
+            <lt4:sta>09:23</lt4:sta>
+            <lt4:eta>On time</lt4:eta>
+            <lt4:platform>10A</lt4:platform>
+            <lt4:operator>Great Western Railway</lt4:operator>
+            <lt4:operatorCode>GW</lt4:operatorCode>
+            <lt4:serviceType>train</lt4:serviceType>
+            <lt4:length>8</lt4:length>
+            <lt4:serviceID>alphanumeric_service_id</lt4:serviceID>
+          </lt8:service>
+        </lt8:trainServices>
+      </GetStationBoardResult>
+    </GetArrBoardWithDetailsResponse>
+  </soap:Body>
+</soap:Envelope>

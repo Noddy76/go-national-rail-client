@@ -71,6 +71,7 @@ type Service struct {
 	DelayReason              *string `json:"delay_reason"`
 	Length                   int     `json:"length"`
 	Platform                 int     `json:"platform"`
+	PlatformString           string  `json:"platform_string"`
 }
 
 type ServiceDetails struct {
@@ -107,6 +108,7 @@ type ServiceDetails struct {
 	ActualTimeOfDeparture *string `json:"actual_time_of_departure"`
 	Length                int     `json:"length"`
 	Platform              int     `json:"platform"`
+	PlatformString        string  `json:"platform_string"`
 	IsCancelled           bool    `json:"is_cancelled"`
 	DetachFront           bool    `json:"detach_front"`
 	IsReverseFormation    bool    `json:"is_reverse_formation"`
